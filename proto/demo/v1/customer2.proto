@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package demo.v1;
+
+option go_package = "demo/v1";
+
+import "buf/validate/validate.proto";
+
+message Customer2 {
+  string name = 1 [(buf.validate.field).string = {
+    pattern: "^[[:alpha:]]+( [[:alpha:]]+)*$",
+    max_bytes: 256,
+  }];
+}

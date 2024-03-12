@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+package demo.v1;
+
+option go_package = "demo/v1";
+
+import "buf/validate/validate.proto";
+
+message Customer {
+  string name = 1 [
+    (buf.validate.field).required = true,
+    (buf.validate.field).string = {
+      min_len: 3,
+      max_len: 20,
+    }
+  ];
+
+  string test_name = 2;
+}
