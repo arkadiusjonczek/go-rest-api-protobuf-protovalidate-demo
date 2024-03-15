@@ -13,6 +13,8 @@ type Decoder[E Entity] interface {
 
 var _ Decoder[v1.Customer] = (*CustomerDecoder)(nil)
 
+// CustomerDecoder is a conrete implementation which doesn't use generics
+// because protojson and protovalidate has problems with generics
 type CustomerDecoder struct {
 	unmarshalOptions *protojson.UnmarshalOptions
 	protovalidate    *protovalidate.Validator

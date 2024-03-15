@@ -7,6 +7,18 @@ option go_package = "demo/v1";
 import "buf/validate/validate.proto";
 
 message Customer {
+  option (buf.validate.message).cel = {
+    id: "age_required",
+    message: "age has to be set",
+    expression: "has(this.age)"
+  };
+
+  option (buf.validate.message).cel = {
+    id: "age_max",
+    message: "age has to be gt 0 and lt 120",
+    expression: "this.age > 0 && this.age < 120"
+  };
+
   string name = 1 [
     (buf.validate.field).required = true,
     (buf.validate.field).string = {
@@ -15,5 +27,26 @@ message Customer {
     }
   ];
 
-  string test_name = 2;
+  string username = 2 [
+    (buf.validate.field).cel = {
+      id: "username_format",
+      message: "username must be 3 - 16 characters long and only contain letters and digits",
+      // `this.matches` match the string against a regex pattern, and evaluates to a bool.
+      expression: "this.matches('^[A-Za-z0-9]{3,16}$')"
+    }
+  ];
+
+  string email = 3 [
+    (buf.validate.field).cel = {
+      id: "valid_email",
+      message: "email must be a valid email",
+      expression: "this.isEmail()"
+    }
+  ];
+
+  uint32 age = 4;
+
+  string agree = 5 [
+    (buf.validate.field).string.const = "I agree to the terms and conditions."
+  ];
 }
